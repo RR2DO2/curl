@@ -1923,11 +1923,11 @@ CURLcode Curl_setopt(struct SessionHandle *data, CURLoption option,
 
     data->set.ssl.verifyhost = (0 != arg)?TRUE:FALSE;
     break;
-#ifdef USE_SSLEAY
-    /* since these two options are only possible to use on an OpenSSL-
-       powered libcurl we #ifdef them on this condition so that libcurls
-       built against other SSL libs will return a proper error when trying
-       to set this option! */
+#if defined(USE_SSLEAY) || defined(USE_SCHANNEL)
+    /* since these two options are only possible to use on an OpenSSL or
+       Schannel powered libcurl we #ifdef them on this condition so that
+       libcurls built against other SSL libs will return a proper error when
+       trying to set this option! */
   case CURLOPT_SSL_CTX_FUNCTION:
     /*
      * Set a SSL_CTX callback
