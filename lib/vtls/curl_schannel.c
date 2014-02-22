@@ -203,6 +203,16 @@ schannel_connect_step1(struct connectdata *conn, int sockindex)
         break;
     }
 
+    /* give application a chance to interfere with SSL set up. */
+    if(data->set.ssl.fsslctx) {
+      retcode = (*data->set.ssl.fsslctx)(data, &schannel_cred,
+                                         data->set.ssl.fsslctxp);
+      if(retcode) {
+        failf(data, "schannel: error signaled by ssl ctx callback");
+        return retcode;
+      }
+    }
+
     /* allocate memory for the re-usable credential handle */
     connssl->cred = malloc(sizeof(struct curl_schannel_cred));
     if(!connssl->cred) {
