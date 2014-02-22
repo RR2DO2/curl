@@ -205,11 +205,11 @@ schannel_connect_step1(struct connectdata *conn, int sockindex)
 
     /* give application a chance to interfere with SSL set up. */
     if(data->set.ssl.fsslctx) {
-      retcode = (*data->set.ssl.fsslctx)(data, &schannel_cred,
+      code = (*data->set.ssl.fsslctx)(data, &schannel_cred,
                                          data->set.ssl.fsslctxp);
-      if(retcode) {
+      if(code) {
         failf(data, "schannel: error signaled by ssl ctx callback");
-        return retcode;
+        return code;
       }
     }
 
